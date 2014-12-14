@@ -212,16 +212,12 @@ function! CreateFrame () range " {{{
         let i = l:minl + 1
         while l:i < l:maxl
             let line = getline(l:i)
-            let s1 = strpart(l:line, 0, (l:minc-1))
-            let markup1 = ''
-            let s2 = l:line[(l:minc):(l:maxc-2)]
-
-            if strlen(l:line) < (l:minc-1)
-                let markup1 = repeat(' ', l:minc - 1 - strlen(l:line))
-                let s2 = repeat(' ', l:maxc - l:minc - 1)
+            if strlen(l:line) < (l:maxc-1)
+                let l:line = l:line . repeat(' ', l:maxc - strlen(l:line) - 1)
             endif
-
-            call setline(l:i, l:s1 . l:markup1 .'|'. l:s2 .'|'. l:line[(l:maxc):])
+            let s1 = strpart(l:line, 0, (l:minc-1))
+            let s2 = l:line[(l:minc):(l:maxc-2)]
+            call setline(l:i, l:s1 .'|'. l:s2 .'|'. l:line[(l:maxc):])
             let i = l:i + 1
         endwhile
 
