@@ -69,7 +69,7 @@ function! MoveBlock (direction) range " {{{
             let s3 = l:line[(l:minc-2)]
             let s4 = l:line[(l:maxc):]
             let sr = l:s3 . l:s4
-            if l:sr =~# ' \+'
+            if l:sr =~# ' \+$'
                 let l:sr = ''
             endif
             call setline(l:i, l:s1 . l:s2 . l:sr)
