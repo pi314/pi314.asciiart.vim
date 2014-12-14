@@ -208,6 +208,26 @@ function! CreateFrame () range " {{{
         let line = getline(l:maxl)
         call setline(l:maxl, strpart(l:line, 0, (l:minc-1)) ." ". l:t ." ". l:line[(l:maxc):] )
 
+    elseif l:minl == l:maxl
+        let line = getline(l:minl)
+        let s1 = strpart(l:line, 0, (l:minc-1))
+        let s2 = l:line[ (l:maxc) : ]
+        call setline(l:minl, l:s1 .repeat('-', l:maxc - l:minc + 1). l:s2)
+
+    elseif l:minc == l:maxc
+        let line = getline(l:minl)
+        call setline(l:minl, strpart(l:line, 0, l:minc-1) .'.'. l:line[ (l:maxc) : ])
+
+        let i = l:minl + 1
+        while l:i < l:maxl
+            let line = getline(l:i)
+            call setline(l:i, strpart(l:line, 0, l:minc-1) .'|'. l:line[ (l:maxc) : ])
+            let i = l:i + 1
+        endwhile
+
+        let line = getline(l:maxl)
+        call setline(l:maxl, strpart(l:line, 0, l:minc-1) ."'". l:line[ (l:maxc) : ])
+
     else
         let i = l:minl + 1
         while l:i < l:maxl
