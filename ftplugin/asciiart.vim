@@ -171,8 +171,8 @@ function! MoveBlock (direction) range " {{{
 
 endfunction " }}}
 
-vnoremap mf :call CreateFrame()<CR>
-function! CreateFrame () range " {{{
+vnoremap mf :call MakeFrame()<CR>
+function! MakeFrame () range " {{{
     normal! gv
 
     if mode() != ''
@@ -290,4 +290,18 @@ function! CheckFrame (minl, maxl, minc, maxc) " {{{
 
     return 1
 
+endfunction " }}}
+
+command! -nargs=0 NewFrame call NewFrame()
+function! NewFrame () " {{{
+    " 80 x 24
+    call append('.', '.'.repeat('-', 78).'.')
+    let mid_line = '|'.repeat(' ', 78).'|'
+    let cln = line('.')
+    let i = 1
+    while l:i < 23
+        call append(l:cln + l:i, l:mid_line)
+        let l:i = l:i + 1
+    endwhile
+    call append(l:cln + 23, "'".repeat('-', 78)."'")
 endfunction " }}}

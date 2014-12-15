@@ -17,6 +17,10 @@ After installed, this plugin creates file type ``asciiart`` and ``aa``.
 Usage
 -----
 
+* Create an empty frame with fixed size 80 x 24
+
+  - ``:NewFrame``
+
 * Make a frame
 
   1.  Press ``<C-v>`` (enter visual block mode), select the area you want to make a frame
