@@ -194,39 +194,44 @@ function! MakeFrame () range " {{{
     let minc = l:minc < l:newc ? (l:minc) : (l:newc)
     let maxc = l:maxc > l:newc ? (l:maxc) : (l:newc)
 
-    if CheckFrame(l:minl, l:maxl, l:minc, l:maxc)
-        let i = l:minl + 1
-        while l:i < l:maxl
-            let line = getline(l:i)
-            call setline(l:i, strpart(l:line, 0, (l:minc-1)) .' '. l:line[(l:minc):(l:maxc-2)] .' '. l:line[(l:maxc):])
-            let i = l:i + 1
-        endwhile
+    let cf = CheckFrame(l:minl, l:maxl, l:minc, l:maxc)
+    if l:cf == 0
+        let corners = ".'-"
+        let edges = '-|'
 
-        let t = repeat(' ', l:maxc - l:minc - 1)
+    elseif l:cf == 1
+        let corners = "+++"
+        let edges = '-|'
+
+    else
+        let corners = '   '
+        let edges = '  '
+
+    endif
+
+    if l:minl == l:maxl && l:minc == l:maxc
         let line = getline(l:minl)
-        call setline(l:minl, strpart(l:line, 0, (l:minc-1)) .' '. l:t .' '. l:line[(l:maxc):] )
-        let line = getline(l:maxl)
-        call setline(l:maxl, strpart(l:line, 0, (l:minc-1)) ." ". l:t ." ". l:line[(l:maxc):] )
+        call setline(l:minl, strpart(l:line, 0, (l:minc-1)) . l:edges[0] . l:line[ (l:maxc) : ])
 
     elseif l:minl == l:maxl
         let line = getline(l:minl)
         let s1 = strpart(l:line, 0, (l:minc-1))
         let s2 = l:line[ (l:maxc) : ]
-        call setline(l:minl, l:s1 .repeat('-', l:maxc - l:minc + 1). l:s2)
+        call setline(l:minl, l:s1 . l:corners[2] . repeat(l:edges[0], l:maxc - l:minc - 1) . l:corners[2] . l:s2)
 
     elseif l:minc == l:maxc
         let line = getline(l:minl)
-        call setline(l:minl, strpart(l:line, 0, l:minc-1) .'.'. l:line[ (l:maxc) : ])
+        call setline(l:minl, strpart(l:line, 0, l:minc-1) . l:corners[0] . l:line[ (l:maxc) : ])
 
         let i = l:minl + 1
         while l:i < l:maxl
             let line = getline(l:i)
-            call setline(l:i, strpart(l:line, 0, l:minc-1) .'|'. l:line[ (l:maxc) : ])
+            call setline(l:i, strpart(l:line, 0, l:minc-1) . l:edges[1] . l:line[ (l:maxc) : ])
             let i = l:i + 1
         endwhile
 
         let line = getline(l:maxl)
-        call setline(l:maxl, strpart(l:line, 0, l:minc-1) ."'". l:line[ (l:maxc) : ])
+        call setline(l:maxl, strpart(l:line, 0, l:minc-1) . l:corners[1] . l:line[ (l:maxc) : ])
 
     else
         let i = l:minl + 1
@@ -237,21 +242,42 @@ function! MakeFrame () range " {{{
             endif
             let s1 = strpart(l:line, 0, (l:minc-1))
             let s2 = l:line[(l:minc):(l:maxc-2)]
-            call setline(l:i, l:s1 .'|'. l:s2 .'|'. l:line[(l:maxc):])
+            call setline(l:i, l:s1 . l:edges[1] . l:s2 . l:edges[1] . l:line[(l:maxc):])
             let i = l:i + 1
         endwhile
 
-        let t = repeat('-', l:maxc - l:minc - 1)
+        let t = repeat(l:edges[0], l:maxc - l:minc - 1)
         let line = getline(l:minl)
-        call setline(l:minl, strpart(l:line, 0, (l:minc-1)) .'.'. l:t .'.'. l:line[(l:maxc):] )
+        call setline(l:minl, strpart(l:line, 0, (l:minc-1)) . l:corners[0] . l:t . l:corners[0] . l:line[(l:maxc):] )
         let line = getline(l:maxl)
-        call setline(l:maxl, strpart(l:line, 0, (l:minc-1)) ."'". l:t ."'". l:line[(l:maxc):] )
+        call setline(l:maxl, strpart(l:line, 0, (l:minc-1)) . l:corners[1] . l:t . l:corners[1] . l:line[(l:maxc):] )
 
     endif
 
 endfunction " }}}
 
 function! CheckFrame (minl, maxl, minc, maxc) " {{{
+    if a:minl == a:maxl && a:minc == a:maxc
+        let line = getline(a:minl)
+        if l:line[(a:minc-1)] == '-'
+            return 2
+        endif
+        return 0
+
+    elseif a:minl == a:maxl
+        let line = getline(a:minl)
+        let vertice = l:line[(a:minc-1)] . l:line[(a:maxc-1)]
+        if l:vertice == '++'
+            return 2
+
+        elseif l:vertice == '--'
+            return 1
+
+        endif
+
+        return 0
+    endif
+
     let i = a:minl + 1
     while l:i < a:maxl
         let line = getline(l:i)
@@ -262,33 +288,24 @@ function! CheckFrame (minl, maxl, minc, maxc) " {{{
         let i = l:i + 1
     endwhile
 
-    let line = getline(a:minl)
-    if l:line[(a:minc-1)] != '.' || l:line[(a:maxc-1)] != '.'
-        return 0
-    endif
-
+    let top_line = getline(a:minl)
+    let bot_line = getline(a:maxl)
     let i = a:minc + 1
     while l:i < a:maxc
-        if l:line[(l:i-1)] != '-'
+        if l:top_line[(l:i-1)] != '-' || l:bot_line[(l:i-1)] != '-'
             return 0
         endif
         let i = l:i + 1
     endwhile
 
-    let line = getline(a:maxl)
-    if l:line[(a:minc-1)] != "'" || l:line[(a:maxc-1)] != "'"
+    let corners = l:top_line[(a:minc-1)] . l:top_line[(a:maxc-1)] . l:bot_line[(a:minc-1)] . l:bot_line[(a:maxc-1)]
+    if l:corners == '++++'
+        return 2
+    elseif l:corners == "..''"
+        return 1
+    else
         return 0
     endif
-
-    let i = a:minc + 1
-    while l:i < a:maxc
-        if l:line[(l:i-1)] != '-'
-            return 0
-        endif
-        let i = l:i + 1
-    endwhile
-
-    return 1
 
 endfunction " }}}
 
