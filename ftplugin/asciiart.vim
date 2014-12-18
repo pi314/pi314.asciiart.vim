@@ -9,13 +9,13 @@
 "              Want To Public License, Version 2, as published by Sam Hocevar.
 "              See http://sam.zoy.org/wtfpl/COPYING for more details.
 " ============================================================================
-"
+
 vnoremap L :call MoveBlock('L')<CR>
 vnoremap H :call MoveBlock('H')<CR>
 vnoremap K :call MoveBlock('K')<CR>
 vnoremap J :call MoveBlock('J')<CR>
 
-function! MoveBlock (direction) range " {{{
+function! GetSelectRegion () " {{{
     normal! gv
 
     if mode() != ''
@@ -35,6 +35,17 @@ function! MoveBlock (direction) range " {{{
     let maxl = l:maxl > l:newl ? (l:maxl) : (l:newl)
     let minc = l:minc < l:newc ? (l:minc) : (l:newc)
     let maxc = l:maxc > l:newc ? (l:maxc) : (l:newc)
+    return [l:minl, l:maxl, l:minc, l:maxc]
+
+endfunction " }}}
+
+function! MoveBlock (direction) range " {{{
+
+    let region = GetSelectRegion()
+    let minl = l:region[0]
+    let maxl = l:region[1]
+    let minc = l:region[2]
+    let maxc = l:region[3]
 
     if a:direction ==# 'L'
         let i = l:minl
@@ -173,26 +184,11 @@ endfunction " }}}
 
 vnoremap mf :call MakeFrame()<CR>
 function! MakeFrame () range " {{{
-    normal! gv
-
-    if mode() != ''
-        return
-    endif
-
-    " retrive visual block range
-    let minl = line('.')
-    let maxl = line('.')
-    let minc = col('.')
-    let maxc = col('.')
-
-    normal! o
-    let newl = line('.')
-    let newc = col('.')
-    normal! o
-    let minl = l:minl < l:newl ? (l:minl) : (l:newl)
-    let maxl = l:maxl > l:newl ? (l:maxl) : (l:newl)
-    let minc = l:minc < l:newc ? (l:minc) : (l:newc)
-    let maxc = l:maxc > l:newc ? (l:maxc) : (l:newc)
+    let region = GetSelectRegion()
+    let minl = l:region[0]
+    let maxl = l:region[1]
+    let minc = l:region[2]
+    let maxc = l:region[3]
 
     let cf = CheckFrame(l:minl, l:maxl, l:minc, l:maxc)
     if l:cf == 0
@@ -322,3 +318,4 @@ function! NewFrame () " {{{
     endwhile
     call append(l:cln + 23, "'".repeat('-', 78)."'")
 endfunction " }}}
+
