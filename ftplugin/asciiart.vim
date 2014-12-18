@@ -10,10 +10,20 @@
 "              See http://sam.zoy.org/wtfpl/COPYING for more details.
 " ============================================================================
 
-vnoremap L :call MoveBlock('L')<CR>
-vnoremap H :call MoveBlock('H')<CR>
-vnoremap K :call MoveBlock('K')<CR>
-vnoremap J :call MoveBlock('J')<CR>
+let s:STATUS_NORMAL = 0
+let s:STATUS_DRAW_LINE = 1
+let s:status = s:STATUS_NORMAL
+
+vnoremap L :call PressDir('L')<CR>
+vnoremap H :call PressDir('H')<CR>
+vnoremap K :call PressDir('K')<CR>
+vnoremap J :call PressDir('J')<CR>
+
+function! PressDir (direction) range " {{{
+    if s:status == s:STATUS_NORMAL
+        call MoveBlock(a:direction)
+    endif
+endfunction " }}}
 
 function! GetSelectRegion () " {{{
     normal! gv

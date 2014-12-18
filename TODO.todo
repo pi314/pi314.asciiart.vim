@@ -5,29 +5,40 @@
 *   Todo
 
     -   記錄
+
         +   Visual Block Mode 無法使用 ``<C-r>``
         +   Visual Block Mode 無法使用 ``<expr>``
 
     [ ] 定義 Hot Keys
+
         [v] 移框框 ::
+
                 [n] HJKL
 
             [ ] 單行選取也可移動
 
         [v] 畫框框 ::
+
                 [v] mf
 
         [ ] 清框框 ::
+
                 [v] cf
 
         [ ] 選框框 ::
+
                 [n] <leader>sf
 
-        [ ] 畫線 ::
-                [n] <leader>l1
-                [n] <leader>l2
+        [ ] 畫線
 
-            [ ] 斜線
+            *   全都在 normal mode 下
+            *   開啟畫線模式 ``<leader>l``
+            *   移動端點 ``HJKL``
+            *   設定起始點 ``<leader>1``
+            *   設定終點 ``<leader>2``
+            *   取消 ``<leader>c``
+            *   畫線 ``<leader>l``
+            *   需處理斜線
 
         [ ] 貼上 ::
 
@@ -38,6 +49,7 @@
                 [n] <leader>sl
 
         [ ] 畫箭頭 ::
+
                 [n] <leader>a1
                 [n] <leader>a2
 
@@ -46,7 +58,9 @@
             *   選擇一條 edge 後 ``HJKL``
 
     [ ] 游標在框線上時按下 Hot Key 自動選取框框
+
         [ ] ``<leader>sf``
+
         +   先往 HJKL 方向都觸及可能的 edge
         +   對於每個 edge，若長度不夠，則表示該 edge 不是可用的 edge，繼續往外尋找
         +   若有方向到達邊邊 (頁首頁尾、字串長不夠) 則表示沒有框框可用
