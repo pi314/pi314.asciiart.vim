@@ -4,10 +4,15 @@
 
 *   Todo
 
+    -   原則
+
+        +   ``HJKL`` 用來「抓住東西拖著走」
+
     -   記錄
 
         +   Visual Block Mode 無法使用 ``<C-r>``
         +   Visual Block Mode 無法使用 ``<expr>``
+        +   http://search.cpan.org/dist/App-Asciio/lib/App/Asciio.pm
 
     [ ] 定義 Hot Keys
 
@@ -33,9 +38,9 @@
 
             *   全都在 normal mode 下
             *   開啟畫線模式 ``<leader>l``
-            *   移動端點 ``HJKL``
-            *   設定起始點 ``<leader>1``
-            *   設定終點 ``<leader>2``
+            *   旋轉端點 ``rR``
+            *   增減長度 ``+-``
+            *   Toggle 起始點 ``<leader>v``
             *   取消 ``<leader>c``
             *   畫線 ``<leader>l``
             *   需處理斜線
