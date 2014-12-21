@@ -31,3 +31,10 @@ Usage
 
   1.  Press ``<C-v>`` (enter visual block mode), select the area you want to move around
   2.  Use ``H``, ``J``, ``K``, ``L`` to move it
+
+* Yank & Paste a block
+
+  1.  Press ``<C-v>`` (enter visual block mode), select the area you want to yank
+  2.  Press ``<leader>y`` to yank it
+  3.  Move cursor to the position where you want to paste the yanked block, align the top-left corner
+  4.  ``<leader>p``

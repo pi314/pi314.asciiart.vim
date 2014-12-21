@@ -329,3 +329,36 @@ function! NewFrame () " {{{
     call append(l:cln + 23, "'".repeat('-', 78)."'")
 endfunction " }}}
 
+vnoremap <leader>y :call YankBlock()<CR>
+let s:yank_buffer = []
+function! YankBlock () range " {{{
+    let region = GetSelectRegion()
+    let minl = l:region[0]
+    let maxl = l:region[1]
+    let minc = l:region[2]
+    let maxc = l:region[3]
+
+    let s:yank_buffer = []
+    for i in range(l:minl, l:maxl)
+        let line = getline(i)
+        call add(s:yank_buffer, strpart( l:line, l:minc-1, l:maxc-l:minc+1 ) )
+    endfor
+
+endfunction " }}}
+
+nnoremap <leader>p :call PasteBlock()<CR>
+function! PasteBlock () " {{{
+    let row = line('.')
+    let col = col('.')
+    for i in range(0, len(s:yank_buffer) - 1)
+        let line = getline(l:row + i)
+        if strlen(l:line) < (l:col - 1)
+            let l:line = l:line . repeat(' ', l:col - 1 - strlen(l:line))
+        endif
+        let s1 = strpart(l:line, 0, l:col - 1)
+        let s2 = s:yank_buffer[i]
+        let s3 = l:line[ (l:col - 1 + strlen(l:s2) ) : ]
+        cal setline(l:row + i, l:s1 . l:s2 . l:s3)
+    endfor
+
+endfunction " }}}
