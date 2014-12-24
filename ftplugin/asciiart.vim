@@ -343,6 +343,7 @@ function! YankBlock () range " {{{
         let line = getline(i)
         call add(s:yank_buffer, strpart( l:line, l:minc-1, l:maxc-l:minc+1 ) )
     endfor
+    normal! vv
 
 endfunction " }}}
 
