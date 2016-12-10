@@ -9,6 +9,9 @@
 "              Want To Public License, Version 2, as published by Sam Hocevar.
 "              See http://sam.zoy.org/wtfpl/COPYING for more details.
 " ============================================================================
+"
+setlocal conceallevel=3
+setlocal nowrap
 
 let s:STATUS_NORMAL = 0
 let s:STATUS_DRAW_LINE = 1
@@ -362,4 +365,22 @@ function! PasteBlock () " {{{
         cal setline(l:row + i, l:s1 . l:s2 . l:s3)
     endfor
 
+endfunction " }}}
+
+nnoremap <leader>w :call ToggleWrap()<CR>
+function! ToggleWrap () " {{{
+    if &wrap
+        setlocal nowrap
+    else
+        setlocal wrap
+    endif
+endfunction " }}}
+
+nnoremap <leader>c :call ToggleConceal()<CR>
+function! ToggleConceal () " {{{
+    if &conceallevel == 3
+        setlocal conceallevel=0
+    else
+        setlocal conceallevel=3
+    endif
 endfunction " }}}

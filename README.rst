@@ -38,3 +38,12 @@ Usage
   2.  Press ``<leader>y`` to yank it
   3.  Move cursor to the position where you want to paste the yanked block, align the top-left corner
   4.  ``<leader>p``
+
+* Show/hide color escape code
+
+  - ``<leader>c``
+  - Color escape codes on the cursor line always shows
+
+* Toggle text wrapping
+
+  - ``<leader>w``
