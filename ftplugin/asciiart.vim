@@ -17,7 +17,7 @@ nnoremap <silent> <Plug>AsciiartToggleWrap :call asciiart#toggle_wrap()<CR>
 nnoremap <silent> <Plug>AsciiartToggleConceal :call asciiart#toggle_conceal()<CR>
 nnoremap <silent> <Plug>AsciiartShowMenu :call asciiart#show_menu()<CR>
 nnoremap <silent> <Plug>AsciiartToolTrigger :call asciiart#tool_trigger()<CR>
-nnoremap <silent> <Plug>AsciiartSelectRectangle :call asciiart#select_tool('RECTANGLE')<CR>
+nnoremap <silent> <Plug>AsciiartSelectRectangle :call asciiart#select_tool('rectangle')<CR>
 nnoremap <silent> <Plug>AsciiartToolCancel :call asciiart#tool_cancel()<CR>
 
 

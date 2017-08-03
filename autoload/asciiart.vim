@@ -1,4 +1,4 @@
-let s:state = 'IDLE'
+let s:selected_tool = 'NONE'
 
 
 let s:menu_items = [
@@ -40,15 +40,14 @@ function! asciiart#select_tool (tool) " {{{
     " recover buffered lines
     call asciiart#canvas#restore_lines()
 
-    if a:tool == 'RECTANGLE'
-        let s:state = 'RECTANGLE'
-        call asciiart#rectangle#reset()
-    else
-        if s:state == 'RECTANGLE'
-            call asciiart#rectangle#reset()
-        endif
+    if s:selected_tool != 'NONE'
+        call function('asciiart#'. s:selected_tool .'#reset')()
+    endif
 
-        let s:state = 'IDLE'
+    let s:selected_tool = a:tool
+
+    if s:selected_tool != 'NONE'
+        call function('asciiart#'. s:selected_tool .'#reset')()
     endif
 endfunction " }}}
 
@@ -88,16 +87,14 @@ endfunction " }}}
 
 
 function! asciiart#tool_trigger () " {{{
-    if s:state == 'RECTANGLE'
-        call asciiart#rectangle#trigger()
-    else
-        call asciiart#select_tool('NONE')
+    if s:selected_tool != 'NONE'
+        call function('asciiart#'. s:selected_tool .'#trigger')()
     endif
 endfunction " }}}
 
 
 function! asciiart#tool_cancel () " {{{
-    if s:state == 'RECTANGLE'
-        call asciiart#rectangle#cancel()
+    if s:selected_tool != 'NONE'
+        call function('asciiart#'. s:selected_tool .'#cancel')()
     endif
 endfunction " }}}
