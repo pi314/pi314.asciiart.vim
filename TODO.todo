@@ -1,6 +1,6 @@
 >   Tools
-    >   trigger_tool
-    >   notify_tool
-    >   reset_tool
-    >   cancel tool = reset_tool + select(none)
-    >   select tool = reset_tool + select(tool)
+    >   tool#trigger()
+    >   tool#notify()
+    >   tool#reset()
+    >   cancel tool = tool#reset() + select(none)
+    >   select tool = tool#reset() + select(tool)
