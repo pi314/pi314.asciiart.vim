@@ -1,14 +1,14 @@
-function! asciiart#rectangle#reset ()
+function! asciiart#rectangle#reset () " {{{
     let s:cvs_anchor = [-1, -1]
     let s:cvs_last_cursor = [-1, -1]
-endfunction
+endfunction " }}}
 
 
-function! asciiart#rectangle#select ()
-endfunction
+function! asciiart#rectangle#select () " {{{
+endfunction " }}}
 
 
-function! asciiart#rectangle#trigger ()
+function! asciiart#rectangle#trigger () " {{{
     let s:cvs_anchor = getpos('.')[1:2]
     let s:cvs_last_cursor = copy(s:cvs_anchor)
 
@@ -19,10 +19,10 @@ function! asciiart#rectangle#trigger ()
         autocmd! asciiart CursorMoved
         autocmd asciiart CursorMoved * call asciiart#rectangle#cursor_moved()
     augroup end
-endfunction
+endfunction " }}}
 
 
-function! asciiart#rectangle#cursor_moved ()
+function! asciiart#rectangle#cursor_moved () " {{{
     let l:current_cursor = getpos('.')[1:2]
 
     if abs(s:cvs_anchor[0] - l:current_cursor[0]) < abs(s:cvs_anchor[0] - s:cvs_last_cursor[0])
@@ -38,4 +38,4 @@ function! asciiart#rectangle#cursor_moved ()
     endfor
 
     let s:cvs_last_cursor = getpos('.')[1:2]
-endfunction
+endfunction " }}}
