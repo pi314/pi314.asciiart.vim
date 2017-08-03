@@ -6,13 +6,13 @@ A simple plugin that allows you drawing ASCII-art picture easier.
 
 (Not release yet, many feature may be added in the future)
 
-This plugin is Vundle compatiable, you can add ::
+This plugin is Vundle compatiable. To install, you can add ::
 
-  Bundle 'pi314/AsciiArt'
+  Bundle 'pi314/pi314.asciiart.vim'
 
 into your vimrc.
 
-After installed, this plugin creates file type ``asciiart`` and ``aa``.
+This plugin applies to file type ``asciiart``.
 
 Usage
 -----
