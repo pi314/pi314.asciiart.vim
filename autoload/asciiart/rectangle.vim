@@ -8,6 +8,9 @@ function! asciiart#rectangle#reset () " {{{
         autocmd! asciiart CursorMoved
     augroup end
     call asciiart#canvas#restore_lines()
+
+    silent! nunmap <buffer> o
+    silent! nunmap <buffer> O
 endfunction " }}}
 
 
@@ -17,11 +20,15 @@ function! asciiart#rectangle#trigger () " {{{
         let s:last_cursor = copy(s:anchor)
         augroup asciiart
             autocmd! asciiart InsertEnter
-            autocmd asciiart InsertEnter * call <SID>select_tool(s:NONE)
+            autocmd asciiart InsertEnter * :call asciiart#rectangle#reset()
 
             autocmd! asciiart CursorMoved
-            autocmd asciiart CursorMoved * call asciiart#rectangle#cursor_moved()
+            autocmd asciiart CursorMoved * :call asciiart#rectangle#cursor_moved()
         augroup end
+
+        nnoremap <buffer> <silent> o :call asciiart#rectangle#switch_anchor_o()<CR>
+        nnoremap <buffer> <silent> O :call asciiart#rectangle#switch_anchor_O()<CR>
+
         let s:state = 'ANCHOR_SET'
     elseif s:state == 'ANCHOR_SET'
         call asciiart#canvas#commit_lines()
@@ -67,4 +74,28 @@ function! asciiart#rectangle#cursor_moved () " {{{
     endfor
 
     let s:last_cursor = getpos('.')[1:2]
+endfunction " }}}
+
+
+function! asciiart#rectangle#cancel () " {{{
+    if s:state == 'IDLE'
+        call asciiart#select_tool('NONE')
+    elseif s:state == 'ANCHOR_SET'
+        call asciiart#rectangle#reset()
+    endif
+endfunction " }}}
+
+
+function! asciiart#rectangle#switch_anchor_o () " {{{
+    let l:current_cursor = getpos('.')[1:2]
+    let [l:current_cursor[0], s:anchor[0]] = [s:anchor[0], l:current_cursor[0]]
+    let [l:current_cursor[1], s:anchor[1]] = [s:anchor[1], l:current_cursor[1]]
+    call cursor(l:current_cursor[0], l:current_cursor[1])
+endfunction " }}}
+
+
+function! asciiart#rectangle#switch_anchor_O () " {{{
+    let l:current_cursor = getpos('.')[1:2]
+    let [l:current_cursor[1], s:anchor[1]] = [s:anchor[1], l:current_cursor[1]]
+    call cursor(l:current_cursor[0], l:current_cursor[1])
 endfunction " }}}

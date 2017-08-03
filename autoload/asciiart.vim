@@ -87,10 +87,17 @@ function! asciiart#show_menu () " {{{
 endfunction " }}}
 
 
-function! asciiart#trigger_tool () " {{{
+function! asciiart#tool_trigger () " {{{
     if s:state == 'RECTANGLE'
         call asciiart#rectangle#trigger()
     else
         call asciiart#select_tool('NONE')
+    endif
+endfunction " }}}
+
+
+function! asciiart#tool_cancel () " {{{
+    if s:state == 'RECTANGLE'
+        call asciiart#rectangle#cancel()
     endif
 endfunction " }}}
