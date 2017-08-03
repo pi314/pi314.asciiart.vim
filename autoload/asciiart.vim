@@ -38,17 +38,17 @@ endfunction " }}}
 
 function! asciiart#select_tool (tool) " {{{
     " recover buffered lines
-    call asciiart#canvas#restore_all_lines()
+    call asciiart#canvas#restore_lines()
 
     if a:tool == 'RECTANGLE'
         let s:state = 'RECTANGLE'
         call asciiart#rectangle#reset()
     else
+        if s:state == 'RECTANGLE'
+            call asciiart#rectangle#reset()
+        endif
+
         let s:state = 'IDLE'
-        augroup asciiart
-            autocmd! asciiart InsertEnter
-            autocmd! asciiart CursorMoved
-        augroup end
     endif
 endfunction " }}}
 
@@ -91,6 +91,6 @@ function! asciiart#trigger_tool () " {{{
     if s:state == 'RECTANGLE'
         call asciiart#rectangle#trigger()
     else
-        call s:select_tool(s:NONE)
+        call asciiart#select_tool('NONE')
     endif
 endfunction " }}}
