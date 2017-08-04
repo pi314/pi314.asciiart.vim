@@ -116,7 +116,8 @@ endfunction " }}}
 
 
 function! asciiart#rectangle#change_skin () " {{{
-    let s:shape = (s:shape + len(s:top_corner)) % len(s:top_corner)
+    let s:shape = (s:shape + 1) % len(s:top_corner)
+    call s:draw_rectangle()
 endfunction " }}}
 
 
