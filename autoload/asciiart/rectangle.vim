@@ -124,6 +124,10 @@ function! asciiart#rectangle#shift_rectangle (d_row, d_col) " {{{
     let l:row_rng = sort([s:anchor1[0], s:anchor2[0]], 'n')
     let l:col_rng = sort([s:anchor1[1], s:anchor2[1]], 'n')
 
+    if l:row_rng[0] + a:d_row < 1 || l:col_rng[0] + a:d_col < 1
+        return
+    endif
+
     if l:row_rng[1] + a:d_row > line('$')
         for l:i in range(l:row_rng[1] + a:d_row - line('$'))
             call append('$', '')
