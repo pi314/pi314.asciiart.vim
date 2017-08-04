@@ -2,6 +2,9 @@ function! asciiart#rectangle#reset () " {{{
     let s:state = 'IDLE'
     let s:anchor = [-1, -1]
     let s:last_cursor = [-1, -1]
+    let s:top_corner = ['.', '+']
+    let s:bot_corner = ['''', '+']
+    let s:shape = 0
 
     augroup asciiart
         autocmd! asciiart InsertEnter
@@ -11,6 +14,7 @@ function! asciiart#rectangle#reset () " {{{
 
     silent! nunmap <buffer> o
     silent! nunmap <buffer> O
+    silent! nunmap <buffer> <Space>
 endfunction " }}}
 
 
@@ -28,6 +32,7 @@ function! asciiart#rectangle#trigger () " {{{
 
         nnoremap <buffer> <silent> o :call asciiart#rectangle#switch_anchor_o()<CR>
         nnoremap <buffer> <silent> O :call asciiart#rectangle#switch_anchor_O()<CR>
+        nnoremap <buffer> <silent> <Space> :call asciiart#rectangle#change_skin()<CR>
 
         let s:state = 'ANCHOR_SET'
     elseif s:state == 'ANCHOR_SET'
@@ -44,6 +49,20 @@ function! asciiart#rectangle#cursor_moved () " {{{
 
     let l:current_cursor = getpos('.')[1:2]
 
+    if s:anchor[0] < l:current_cursor[0] && l:current_cursor[0] < s:last_cursor[0]
+        " rectangle range shrinked
+        call asciiart#canvas#restore_lines(l:current_cursor[0], s:last_cursor[0])
+    elseif s:last_cursor[0] < l:current_cursor[0] && l:current_cursor[0] < s:anchor[0]
+        " rectangle range shrinked
+        call asciiart#canvas#restore_lines(l:current_cursor[0], s:last_cursor[0])
+    elseif l:current_cursor[0] < s:anchor[0] && s:anchor[0] < s:last_cursor[0]
+        " rectangle change to another direction
+        call asciiart#canvas#restore_lines(s:anchor[0], s:last_cursor[0])
+    elseif s:last_cursor[0] < s:anchor[0] && s:anchor[0] < l:current_cursor[0]
+        " rectangle change to another direction
+        call asciiart#canvas#restore_lines(s:anchor[0], s:last_cursor[0])
+    endif
+
     if abs(s:anchor[0] - l:current_cursor[0]) < abs(s:anchor[0] - s:last_cursor[0])
         " rectangle range shrinked
         call asciiart#canvas#restore_lines(l:current_cursor[0], s:last_cursor[0])
@@ -57,7 +76,7 @@ function! asciiart#rectangle#cursor_moved () " {{{
         let l:str = asciiart#canvas#getline(l:line)
         let l:str1 = strpart(l:str, 0, l:col_rng[0] - 1)
         if l:line == l:row_rng[0]
-            let l:str2 = '.'
+            let l:str2 = ['.'][(s:shape)]
             let l:str3 = repeat('-', l:col_rng[1] - l:col_rng[0] - 1)
             let l:str4 = l:col_rng[0] == l:col_rng[1] ? '' : '.'
         elseif l:line == l:row_rng[1]
@@ -98,4 +117,9 @@ function! asciiart#rectangle#switch_anchor_O () " {{{
     let l:current_cursor = getpos('.')[1:2]
     let [l:current_cursor[1], s:anchor[1]] = [s:anchor[1], l:current_cursor[1]]
     call cursor(l:current_cursor[0], l:current_cursor[1])
+endfunction " }}}
+
+
+function! asciiart#rectangle#change_skin () " {{{
+    let s:shape = (s:shape + len(s:top_corner)) % len(s:top_corner)
 endfunction " }}}
