@@ -7,7 +7,7 @@ function! asciiart#canvas#store_lines (row1, row2) " {{{
 
     for l:line in range(l:min, l:max)
         if !has_key(s:buffer, l:line)
-            let s:buffer[(l:line)] = getline('.')
+            let s:buffer[(l:line)] = getline(l:line)
         endif
     endfor
 endfunction " }}}
